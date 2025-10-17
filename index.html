@@ -6,7 +6,6 @@
     <title>Elan - Luxury Property Project</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -20,42 +19,83 @@
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        
         .blur-content {
             filter: blur(8px);
             transition: filter 0.3s ease;
         }
+        
         .smooth-scroll {
             scroll-behavior: smooth;
         }
+        
         .parallax-bg {
             background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
         }
+        
         @media (max-width: 768px) {
             .parallax-bg {
                 background-attachment: scroll;
             }
         }
         
-        /* Custom animation for the call button */
-        .call-button-animation {
-            animation: callPulse 2s infinite, callGlow 3s infinite;
+        .gradient-text {
+            background: linear-gradient(135deg, #005482 0%, #20adbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .premium-card {
             position: relative;
             overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .premium-card:hover::before {
+            left: 100%;
+        }
+        
+        .premium-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(0, 84, 130, 0.3);
+            border-color: rgba(32, 173, 187, 0.3);
+        }
+        
+        .call-button-animation {
+            animation: callPulse 2.5s infinite ease-in-out;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(32, 173, 187, 0.6);
         }
         
         @keyframes callPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes callGlow {
-            0% { box-shadow: 0 0 5px rgba(32, 173, 187, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(32, 173, 187, 0.8), 0 0 30px rgba(32, 173, 187, 0.6); }
-            100% { box-shadow: 0 0 5px rgba(32, 173, 187, 0.5); }
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px -10px rgba(32, 173, 187, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px -10px rgba(32, 173, 187, 0.8); }
         }
         
         .call-button-animation::before {
@@ -65,7 +105,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transform: rotate(45deg);
             animation: shimmer 3s infinite;
         }
@@ -74,176 +114,338 @@
             0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
+        
+        .image-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,84,130,0.5) 0%, rgba(32,173,187,0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .image-overlay:hover::after {
+            opacity: 1;
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #20adbb, transparent);
+            margin: 2.5rem 0;
+        }
+        
+        .luxury-border {
+            position: relative;
+        }
+        
+        .luxury-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #005482, #20adbb);
+            z-index: -1;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Call Confirmation Dialog Styles */
+        .call-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .call-dialog.show {
+            display: flex;
+        }
+
+        .dialog-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            margin: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .dialog-content {
+                padding: 2rem;
+                max-width: 400px;
+            }
+        }
+
+        .call-dialog.show .dialog-content {
+            transform: scale(1);
+        }
+
+        .dialog-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .dialog-buttons {
+                flex-direction: row;
+                gap: 1rem;
+            }
+        }
+
+        .dialog-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 640px) {
+            .dialog-btn {
+                font-size: 1rem;
+            }
+        }
+
+        .dialog-btn.yes {
+            background: linear-gradient(135deg, #005482, #20adbb);
+            color: white;
+        }
+
+        .dialog-btn.yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 84, 130, 0.4);
+        }
+
+        .dialog-btn.no {
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px solid #d1d5db;
+        }
+
+        .dialog-btn.no:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="smooth-scroll bg-white text-gray-800">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-lg z-50">
+    <nav class="fixed top-0 w-full glass-effect shadow-2xl z-50 border-b border-black/10 bg-black/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="text-2xl font-bold text-primary">
+            <div class="flex justify-between items-center py-4 md:py-6">
+                <div class="text-xl md:text-2xl font-bold">
                     <a href="/index.html">
-                        <img src="logo.png" alt="Elan" class="w-20">
+                        <img src="logo.png" alt="Elan" class="w-20 md:w-28 transition-all hover:scale-110">
                     </a>
                 </div>
                 <div class="hidden md:flex space-x-8 items-center">
-                    <!-- <a href="#hero" class="hover:text-secondary transition-colors">Home</a>
-                    <a href="#about" class="hover:text-secondary transition-colors">About</a>
-                    <a href="#contact" class="hover:text-secondary transition-colors">Contact</a> -->
-                    <a href="tel:+919090939193" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-lg font-semibold transition-all transform hover:scale-105 call-button-animation relative">
-                        <i class="fas fa-phone mr-2"></i>+91 9090 939193
+                    <a href="tel:+919090939193" class="bg-gradient-to-r from-secondary via-secondary to-primary text-white px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-bold transition-all transform call-button-animation relative rounded">
+                        <i class="fas fa-phone-alt mr-2"></i>+91 9090 939193
                     </a>
                 </div>
-                <button class="md:hidden">
-                    <i class="fas fa-bars text-primary"></i>
+                <button class="md:hidden bg-black/10 p-2 rounded border border-black/20">
+                    <i class="fas fa-bars text-black text-xl md:text-2xl"></i>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero" class="min-h-screen flex items-center justify-center parallax-bg" style="background-image: url('img/banner.png');">
-        <div class="absolute inset-0 bg-black/40"></div>
-        <div class="relative z-10 text-center text-white px-4">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">ELAN</h1>
-            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Experience luxury living at its finest. Your dream home awaits in the heart of the city.</p>
-            <button class="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105">
-                <a href="tel:+919090939193">Call Us Today</a>
+    <section id="hero" class="min-h-screen flex items-center justify-center parallax-bg relative" style="background-image: url('img/banner.png');">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+        <div class="relative z-10 text-center text-white px-4 max-w-6xl mx-auto">
+            <div class="floating-animation mb-5">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl tracking-tighter mb-4 md:mb-6 text-white" style="text-shadow: 3px 6px 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5); letter-spacing: -0.02em;">ELAN</h1>
+                <div class="h-1 md:h-1.5 w-32 md:w-40 bg-gradient-to-r from-black/30 via-secondary to-black/30 mx-auto"></div>
+            </div>
+            <p class="text-lg md:text-2xl lg:text-4xl mb-8 md:mb-16 max-w-5xl mx-auto font-light leading-relaxed tracking-wide px-4" style="text-shadow: 2px 4px 8px rgba(0,0,0,0.4);">
+                Where architectural excellence meets unparalleled luxury. <br class="hidden md:block"/>Your extraordinary lifestyle begins here.
+            </p>
+            <button class="bg-gradient-to-r from-secondary via-secondary to-primary text-white px-10 md:px-16 py-4 md:py-6 text-lg md:text-xl font-black transition-all transform hover:scale-110 shadow-2xl hover:shadow-secondary/50 rounded w-full md:w-auto max-w-sm md:max-w-none mx-auto md:mx-0">
+                <a href="tel:+919090939193" class="flex items-center justify-center gap-2 md:gap-3">
+                    <i class="fas fa-phone-volume"></i>
+                    CALL NOW
+                </a>
             </button>
         </div>
     </section>
 
     <!-- About Project -->
-    <section id="about" class="py-20 bg-gray-50">
+    <section id="about" class="py-6 md:py-10 bg-gradient-to-b from-gray-50 via-white to-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">About Elan</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Elan represents the pinnacle of luxury living, combining modern architecture with timeless elegance. 
-                    Our vision is to create a community where residents can enjoy the perfect balance of comfort, convenience, and sophistication.
+                <h2 class="text-4xl md:text-6xl lg:text-7xl gradient-text mb-6 md:mb-8">About Elan</h2>
+                <div class="h-1.5 w-24 md:w-32 bg-gradient-to-r from-black via-primary to-black mx-auto mb-6 md:mb-5"></div>
+                <p class="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-5xl mx-auto leading-relaxed font-light px-4">
+                    Elan represents the pinnacle of luxury living, combining modern architecture with timeless elegance. Our vision is to create a community where residents can enjoy the perfect balance of comfort, convenience, and sophistication.
                 </p>
             </div>
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-bold text-primary mb-6">Our Vision</h3>
-                    <p class="text-gray-600 mb-6">
-                        To redefine urban living by creating spaces that inspire, comfort, and elevate the human experience. 
-                        Every detail at Elan is crafted with precision and passion.
-                    </p>
-                    <h3 class="text-2xl font-bold text-primary mb-6">Unique Value</h3>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-center"><i class="fas fa-check text-secondary mr-3"></i>Premium location with excellent connectivity</li>
-                        <li class="flex items-center"><i class="fas fa-check text-secondary mr-3"></i>World-class amenities and facilities</li>
-                        <li class="flex items-center"><i class="fas fa-check text-secondary mr-3"></i>Sustainable and eco-friendly design</li>
-                        <li class="flex items-center"><i class="fas fa-check text-secondary mr-3"></i>24/7 security and concierge services</li>
-                    </ul>
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                <div class="space-y-8 md:space-y-10">
+                    <div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-black mb-4 md:mb-6">Our Vision</h3>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            To redefine urban living by creating spaces that inspire, comfort, and elevate the human experience. 
+                            Every detail at Elan is crafted with precision and passion.
+                        </p>
+                    </div>
+                    <div class="section-divider"></div>
+                    <div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-black mb-6 md:mb-8">Unique Value</h3>
+                        <ul class="space-y-4 md:space-y-5">
+                            <li class="flex items-start group">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-secondary to-primary flex items-center justify-center mr-4 md:mr-5 flex-shrink-0 mt-1 shadow-lg">
+                                    <i class="fas fa-check text-white text-sm md:text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-base md:text-lg group-hover:text-primary transition-colors">Premium location with excellent connectivity</span>
+                            </li>
+                            <li class="flex items-start group">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-secondary to-primary flex items-center justify-center mr-4 md:mr-5 flex-shrink-0 mt-1 shadow-lg">
+                                    <i class="fas fa-check text-white text-sm md:text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-base md:text-lg group-hover:text-primary transition-colors">World-class amenities and facilities</span>
+                            </li>
+                            <li class="flex items-start group">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-secondary to-primary flex items-center justify-center mr-4 md:mr-5 flex-shrink-0 mt-1 shadow-lg">
+                                    <i class="fas fa-check text-white text-sm md:text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-base md:text-lg group-hover:text-primary transition-colors">Sustainable and eco-friendly design</span>
+                            </li>
+                            <li class="flex items-start group">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-secondary to-primary flex items-center justify-center mr-4 md:mr-5 flex-shrink-0 mt-1 shadow-lg">
+                                    <i class="fas fa-check text-white text-sm md:text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-base md:text-lg group-hover:text-primary transition-colors">24/7 security and concierge services</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="relative">
-                    <img src="img/3.png" 
-                         alt="Elan Project" class="rounded-lg shadow-xl">
+                <div class="relative image-overlay order-first md:order-last">
+                    <div class="absolute -inset-6 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl"></div>
+                    <img src="img/3.png" alt="Elan Project" class="relative shadow-2xl w-full hover:scale-105 transition-transform duration-500 rounded">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Project Highlights -->
-    <section id="highlights" class="py-20">
+    <section id="highlights" class="py-10  bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Project Highlights</h2>
-                <p class="text-xl text-gray-600">Discover what makes Elan the perfect choice for your next home</p>
+            <div class="text-center mb-8">
+                <h2 class="text-4xl md:text-6xl lg:text-7xl gradient-text mb-6 md:mb-8 py-2">Project Highlights</h2>
+                <div class="h-1.5 w-24 md:w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-6 md:mb-5"></div>
+                <p class="text-lg md:text-xl lg:text-2xl text-gray-600 font-light px-4">Discover what makes Elan the perfect choice for your next home</p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-map-marker-alt text-white text-2xl"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 ">
+                <div class="text-center p-6 premium-card bg-white border border-black/5">
+                    <div class="w-20 h-20 bg-gradient-to-br from-black to-gray-800 flex items-center justify-center mx-auto mb-6 md:mb-8 shadow-2xl rounded">
+                        <i class="fas fa-map-marker-alt text-white text-3xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-primary mb-3">Prime Location</h3>
-                    <p class="text-gray-600">Strategically located in the heart of the city with excellent connectivity to business districts, schools, and entertainment hubs.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-black mb-4 md:mb-5">Prime Location</h3>
+                    <p class="text-gray-600 text-base md:text-lg leading-relaxed">Strategically located in the heart of the city with excellent connectivity to business districts, schools, and entertainment hubs.</p>
                 </div>
-                <div class="text-center p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-crown text-white text-2xl"></i>
+                <div class="text-center p-6 premium-card bg-white border border-black/5">
+                    <div class="w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-6 md:mb-8 shadow-2xl rounded">
+                        <i class="fas fa-crown text-white text-3xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-primary mb-3">Luxury Amenities</h3>
-                    <p class="text-gray-600">State-of-the-art facilities including swimming pool, gym, spa, clubhouse, and landscaped gardens for ultimate comfort.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-black mb-4 md:mb-5">Luxury Amenities</h3>
+                    <p class="text-gray-600 text-base md:text-lg leading-relaxed">State-of-the-art facilities including swimming pool, gym, spa, clubhouse, and landscaped gardens for ultimate comfort.</p>
                 </div>
-                <div class="text-center p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                <div class="text-center p-6 premium-card bg-white border border-black/5">
+                    <div class="w-20 h-20 bg-gradient-to-br from-black to-gray-800 flex items-center justify-center mx-auto mb-6 md:mb-8 shadow-2xl rounded">
+                        <i class="fas fa-shield-alt text-white text-3xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-primary mb-3">Secure Living</h3>
-                    <p class="text-gray-600">24/7 security surveillance, gated community, and advanced safety systems ensure peace of mind for all residents.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-black mb-4 md:mb-5">Secure Living</h3>
+                    <p class="text-gray-600 text-base md:text-lg leading-relaxed">24/7 security surveillance, gated community, and advanced safety systems ensure peace of mind for all residents.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Unit Specifications -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-8  bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Unit Specifications</h2>
-                <p class="text-xl text-gray-600">Choose from our carefully designed residential units</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl gradient-text mb-6 md:mb-8 py-2">Unit Specifications</h2>
+                <div class="h-1.5 w-24 md:w-32 bg-gradient-to-r from-black via-primary to-black mx-auto mb-6 md:mb-5"></div>
+                <p class="text-lg md:text-xl lg:text-2xl text-gray-600 font-light px-4">Choose from our carefully designed residential units</p>
             </div>
             <div class="flex justify-center">
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-6xl w-full">
+                <div class="bg-white shadow-2xl overflow-hidden max-w-6xl w-full premium-card rounded">
                     <div class="flex flex-col lg:flex-row">
-                        <!-- Image Section -->
                         <div class="lg:w-1/2 relative">
                             <div class="blur-content">
-                                <img src="img/10.png" 
-                                     alt="4BHK Unit" class="w-full h-80 lg:h-full object-cover">
+                                <img src="img/10.png" alt="4BHK Unit" class="w-full h-64 md:h-96 lg:h-[600px] object-cover">
                             </div>
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">Premium</span>
+                            <div class="absolute top-4 md:top-8 right-4 md:right-8">
+                                <span class="bg-black text-white px-3 md:px-5 py-1 md:py-2 text-xs md:text-sm font-bold shadow-lg rounded">PREMIUM</span>
                             </div>
                         </div>
                         
-                        <!-- Content Section -->
-                        <div class="lg:w-1/2 p-8">
-                            <div class="mb-6">
-                                <h3 class="text-3xl font-bold text-primary mb-2">4BHK</h3>
-                                <p class="text-lg text-gray-600 mb-4">4,500 sq ft • 4 Bedrooms • 3 Bathrooms</p>
+                        <div class="lg:w-1/2 p-6 md:p-12">
+                            <div class="mb-6 md:mb-8">
+                                <h3 class="text-3xl md:text-5xl text-black mb-3 md:mb-4">4BHK</h3>
+                                <p class="text-lg md:text-xl text-gray-600 mb-4 md:mb-6">4,500 sq ft • 4 Bedrooms • 3 Bathrooms</p>
                             </div>
                             
-                            <div class="grid grid-cols-3 gap-4 mb-6">
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary mb-1">4,500</div>
-                                    <div class="text-sm text-gray-600">Sq Ft</div>
-                                </div>
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary mb-1">4</div>
-                                    <div class="text-sm text-gray-600">Bedrooms</div>
-                                </div>
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary mb-1">3</div>
-                                    <div class="text-sm text-gray-600">Bathrooms</div>
-                                </div>
-                            </div>
+                          
                             
-                            <div class="space-y-3 mb-6">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Premium finishes and fixtures</span>
+                            <div class="space-y-3 md:space-y-4 mb-6 md:mb-5">
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-3 md:mr-4 text-lg md:text-xl"></i>
+                                    <span class="text-sm md:text-lg">Premium finishes and fixtures</span>
                                 </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Panoramic city views</span>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-3 md:mr-4 text-lg md:text-xl"></i>
+                                    <span class="text-sm md:text-lg">Panoramic city views</span>
                                 </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Private terrace access</span>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-3 md:mr-4 text-lg md:text-xl"></i>
+                                    <span class="text-sm md:text-lg">Private terrace access</span>
                                 </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Modern kitchen with premium appliances</span>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-3 md:mr-4 text-lg md:text-xl"></i>
+                                    <span class="text-sm md:text-lg">Modern kitchen with premium appliances</span>
                                 </div>
                             </div>
                             
-                            <button class="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 shadow-lg">
+                            <button class="w-full bg-gradient-to-r from-primary via-secondary to-primary text-white py-4 md:py-5 px-6 md:px-8 text-lg md:text-xl font-black transition-all transform hover:scale-105 shadow-2xl rounded">
                                 <a href="tel:+919090939193" class="flex items-center justify-center">
-                                    <i class="fas fa-phone mr-2"></i>
+                                    <i class="fas fa-phone-alt mr-2 md:mr-3"></i>
                                     Call to View Details
                                 </a>
                             </button>
@@ -254,133 +456,112 @@
         </div>
     </section>
 
-    <!-- Property Layout -->
-    <section class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Property Layout</h2>
-                <p class="text-xl text-gray-600">Explore the masterful design of our residential complex</p>
-            </div>
-            <div class="relative">
-                <div class="blur-content">
-                    <img src="img/4.png" 
-                         alt="Property Layout" class="w-full h-96 object-cover rounded-lg shadow-xl">
-                </div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <button class="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105">
-                        <a href="tel:+919090939193">Click to View Layout</a>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Amenities -->
-    <section id="amenities" class="py-20 bg-gray-50">
+    <section id="amenities" class="py-8  bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">World-Class Amenities</h2>
-                <p class="text-xl text-gray-600">Luxury facilities designed for your comfort and convenience</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl gradient-text mb-6 ">World-Class Amenities</h2>
+                <div class="h-1.5 w-24 md:w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-6 md:mb-5"></div>
+                <p class="text-lg md:text-xl lg:text-2xl text-gray-600 font-light px-4">Luxury facilities designed for your comfort and convenience</p>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-swimming-pool text-white text-2xl"></i>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-black to-gray-800 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-swimming-pool text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Swimming Pool</h3>
-                    <p class="text-gray-600 text-sm">Olympic-sized pool with modern filtration system</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Swimming Pool</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Olympic-sized pool with modern filtration system</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-dumbbell text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-dumbbell text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Fitness Center</h3>
-                    <p class="text-gray-600 text-sm">Fully equipped gym with personal trainers</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Fitness Center</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Fully equipped gym with personal trainers</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-tree text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-tree text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Landscaped Gardens</h3>
-                    <p class="text-gray-600 text-sm">Beautifully designed green spaces for relaxation</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Landscaped Gardens</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Beautifully designed green spaces for relaxation</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-users text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-users text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Clubhouse</h3>
-                    <p class="text-gray-600 text-sm">Exclusive clubhouse for community events</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Clubhouse</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Exclusive clubhouse for community events</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-car text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-black to-gray-800 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-car text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Parking</h3>
-                    <p class="text-gray-600 text-sm">Covered parking with security surveillance</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Parking</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Covered parking with security surveillance</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-spa text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-spa text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Spa & Wellness</h3>
-                    <p class="text-gray-600 text-sm">Premium spa facilities for ultimate relaxation</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Spa & Wellness</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Premium spa facilities for ultimate relaxation</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-child text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-black to-gray-800 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-child text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Kids Play Area</h3>
-                    <p class="text-gray-600 text-sm">Safe and fun play area for children</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Kids Play Area</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">Safe and fun play area for children</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-concierge-bell text-white text-2xl"></i>
+                <div class="text-center premium-card p-4 md:p-8 bg-white border border-black/5 rounded">
+                    <div class="w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl rounded">
+                        <i class="fas fa-concierge-bell text-white text-2xl md:text-4xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary mb-2">Concierge</h3>
-                    <p class="text-gray-600 text-sm">24/7 concierge services for residents</p>
+                    <h3 class="text-base md:text-xl font-bold text-black mb-2 md:mb-3">Concierge</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">24/7 concierge services for residents</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Project Images Gallery -->
-    <section class="py-20">
+    <section class="py-6 md:py-8 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Project Gallery</h2>
-                <p class="text-xl text-gray-600">Experience the beauty of Elan through our image gallery</p>
+            <div class="text-center mb-12">
+                <h2 class="text-6xl md:text-7xl gradient-text mb-5 py-2">Project Gallery</h2>
+                <div class="h-1.5 w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-5"></div>
+                <p class="text-xl md:text-2xl text-gray-600 font-light">Experience the beauty of Elan through our image gallery</p>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="relative group">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="relative group premium-card">
                     <div class="blur-content">
-                        <img src="img/2.png" 
-                             alt="Project Image 1" class="w-full h-64 object-cover rounded-lg">
+                        <img src="img/2.png" alt="Project Image 1" class="w-full h-80 object-cover">
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg font-semibold">
-                            <a href="tel:+919090939193">Click to View</a>
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="bg-gradient-to-r from-secondary to-primary text-white px-8 py-4 text-lg font-bold shadow-2xl transform hover:scale-110 transition-transform border border-black/20">
+                            <a href="tel:+919090939193">Call to View</a>
                         </button>
                     </div>
                 </div>
-                <div class="relative group">
+                <div class="relative group premium-card">
                     <div class="blur-content">
-                        <img src="img/7.png" 
-                             alt="Project Image 2" class="w-full h-64 object-cover rounded-lg">
+                        <img src="img/7.png" alt="Project Image 2" class="w-full h-80 object-cover">
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg font-semibold">
-                            <a href="tel:+919090939193">Click to View</a>
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="bg-gradient-to-r from-secondary to-primary text-white px-8 py-4 text-lg font-bold shadow-2xl transform hover:scale-110 transition-transform">
+                            <a href="tel:+919090939193">Call to View</a>
                         </button>
                     </div>
                 </div>
-                <div class="relative group">
+                <div class="relative group premium-card">
                     <div class="blur-content">
-                        <img src="img/10.png" 
-                             alt="Project Image 3" class="w-full h-64 object-cover rounded-lg">
+                        <img src="img/10.png" alt="Project Image 3" class="w-full h-80 object-cover">
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg font-semibold">
-                            <a href="tel:+919090939193">Click to View</a>
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="bg-gradient-to-r from-secondary to-primary text-white px-8 py-4 text-lg font-bold shadow-2xl transform hover:scale-110 transition-transform">
+                            <a href="tel:+919090939193">Call to View</a>
                         </button>
                     </div>
                 </div>
@@ -389,66 +570,57 @@
     </section>
 
     <!-- Floor Plans -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-12 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Floor Plans</h2>
-                <p class="text-xl text-gray-600">Explore our thoughtfully designed floor plans</p>
+            <div class="text-center mb-12">
+                <h2 class="text-6xl md:text-7xl gradient-text mb-5">Floor Plans</h2>
+                <div class="h-1.5 w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-5"></div>
+                <p class="text-xl md:text-2xl text-gray-600 font-light">Explore our thoughtfully designed floor plans</p>
             </div>
             <div class="flex justify-center">
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-6xl w-full">
+                <div class="bg-white shadow-2xl overflow-hidden max-w-6xl w-full premium-card">
                     <div class="flex flex-col lg:flex-row">
-                        <!-- Image Section -->
                         <div class="lg:w-1/2 relative">
                             <div class="blur-content">
-                                <img src="img/7.png" 
-                                     alt="4BHK Floor Plan" class="w-full h-80 lg:h-full object-cover">
+                                <img src="img/7.png" alt="4BHK Floor Plan" class="w-full h-96 lg:h-[600px] object-cover">
                             </div>
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">Luxury</span>
+                            <div class="absolute top-8 right-8">
+                                <span class="bg-black text-white px-5 py-2 text-sm font-bold shadow-lg">LUXURY</span>
                             </div>
                         </div>
                         
-                        <!-- Content Section -->
-                        <div class="lg:w-1/2 p-8">
-                            <div class="mb-6">
-                                <h3 class="text-3xl font-bold text-primary mb-2">4BHK Floor Plan</h3>
-                                <p class="text-lg text-gray-600 mb-4">Luxury penthouse with panoramic views</p>
+                        <div class="lg:w-1/2 p-12 flex flex-col justify-between">
+                          <div >
+                              <div class="mb-8">
+                                <h3 class="text-5xl text-black mb-4">4BHK Floor Plan</h3>
+                                <p class="text-xl text-gray-600 mb-6">Luxury penthouse with panoramic views</p>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4 mb-6">
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary mb-1">4</div>
-                                    <div class="text-sm text-gray-600">Bedrooms</div>
+                        
+                            
+                            <div class="space-y-4 mb-5">
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-4 text-xl"></i>
+                                    <span class="text-lg">Spacious living and dining areas</span>
                                 </div>
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary mb-1">3</div>
-                                    <div class="text-sm text-gray-600">Bathrooms</div>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-4 text-xl"></i>
+                                    <span class="text-lg">Master bedroom with walk-in closet</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-4 text-xl"></i>
+                                    <span class="text-lg">Modern kitchen with premium appliances</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-check-circle text-secondary mr-4 text-xl"></i>
+                                    <span class="text-lg">Private balcony and terrace</span>
                                 </div>
                             </div>
+                          </div>
                             
-                            <div class="space-y-3 mb-6">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Spacious living and dining areas</span>
-                                </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Master bedroom with walk-in closet</span>
-                                </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Modern kitchen with premium appliances</span>
-                                </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span>Private balcony and terrace</span>
-                                </div>
-                            </div>
-                            
-                            <button class="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 shadow-lg">
+                            <button class="w-full bg-gradient-to-r from-primary via-secondary to-primary text-white py-5 px-8 text-xl font-black transition-all transform hover:scale-105 shadow-2xl">
                                 <a href="tel:+919090939193" class="flex items-center justify-center">
-                                    <i class="fas fa-eye mr-2"></i>
+                                    <i class="fas fa-eye mr-3"></i>
                                     View Floor Plan Details
                                 </a>
                             </button>
@@ -460,85 +632,59 @@
     </section>
 
     <!-- Location -->
-    <section id="location" class="py-20">
+    <section id="location" class="py-6 md:py-8 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Prime Location</h2>
-                <p class="text-xl text-gray-600">Strategically located for maximum convenience and connectivity</p>
+            <div class="text-center mb-12">
+                <h2 class="text-6xl md:text-7xl gradient-text mb-5">Prime Location</h2>
+                <div class="h-1.5 w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-5"></div>
+                <p class="text-xl md:text-2xl text-gray-600 font-light">Strategically located for maximum convenience and connectivity</p>
             </div>
-            <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div>
-                    <div>
-                        <div class="w-full h-96 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <img src="img/banner.webp" alt="Map" class="w-full h-full object-cover">
-                        </div>
+                    <div class="shadow-2xl overflow-hidden premium-card">
+                        <img src="img/banner.webp" alt="Map" class="w-full h-[28rem] object-cover hover:scale-105 transition-transform duration-500">
                     </div>
-                    <div class="mt-6 text-center">
-                        <button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-semibold">
-                            <a href="tel:+919090939193">Click to View Map</a>
+                    <div class="mt-8 text-center">
+                        <button class="bg-gradient-to-r from-primary to-secondary text-white px-12 py-5 text-lg font-bold shadow-2xl hover:scale-105 transition-transform">
+                            <a href="https://maps.google.com/maps?q=Sector+49+Gurugram+Haryana" target="_blank">Click to View Map</a>
                         </button>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold text-primary mb-8">Location Advantage</h3>
-                    <div class="grid grid-cols-1 gap-4">
-                        <!-- Airport -->
-                        <div class="bg-white rounded-xl shadow-lg px-6 py-4 border-l-4 border-secondary hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="flex items-start space-x-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-bold text-gray-800">Indira Gandhi International Airport</h4>
-                                        <span class="bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">25 mins</span>
-                                    </div>
-                                </div>
+                    <h3 class="text-4xl font-bold text-black mb-5">Location Advantage</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="bg-white shadow-xl px-8 py-6 border-l-4 border-secondary premium-card">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-black text-lg">Indira Gandhi International Airport</h4>
+                                <span class="bg-gradient-to-r from-secondary to-primary text-white px-4 py-2 text-sm font-bold shadow-lg">25 mins</span>
                             </div>
                         </div>
 
-                        <!-- Shopping Mall -->
-                        <div class="bg-white rounded-xl shadow-lg px-6 py-4 border-l-4 border-primary hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="flex items-start space-x-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-bold text-gray-800">WorldMark Gurgaon</h4>
-                                        <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">10 mins</span>
-                                    </div>
-                                </div>
+                        <div class="bg-white shadow-xl px-8 py-6 border-l-4 border-black premium-card">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-black text-lg">WorldMark Gurgaon</h4>
+                                <span class="bg-gradient-to-r from-black to-gray-800 text-white px-4 py-2 text-sm font-bold shadow-lg">10 mins</span>
                             </div>
                         </div>
 
-                        <!-- School -->
-                        <div class="bg-white rounded-xl shadow-lg px-6 py-4 border-l-4 border-secondary hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="flex items-start space-x-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-bold text-gray-800">St. Xavier's High School</h4>
-                                        <span class="bg-secondary text-white px-2 py-1 rounded-full text-sm font-semibold">10 mins</span>
-                                    </div>
-                                </div>
+                        <div class="bg-white shadow-xl px-8 py-6 border-l-4 border-secondary premium-card">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-black text-lg">St. Xavier's High School</h4>
+                                <span class="bg-gradient-to-r from-secondary to-primary text-white px-4 py-2 text-sm font-bold shadow-lg">10 mins</span>
                             </div>
                         </div>
 
-                        <!-- University -->
-                        <div class="bg-white rounded-xl shadow-lg px-6 py-4 border-l-4 border-primary hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="flex items-start space-x-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-bold text-gray-800">Gurugram University</h4>
-                                        <span class="bg-primary text-white px-2 py-1 rounded-full text-sm font-semibold">15 mins</span>
-                                    </div>
-                                </div>
+                        <div class="bg-white shadow-xl px-8 py-6 border-l-4 border-black premium-card">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-black text-lg">Gurugram University</h4>
+                                <span class="bg-gradient-to-r from-black to-gray-800 text-white px-4 py-2 text-sm font-bold shadow-lg">15 mins</span>
                             </div>
                         </div>
 
-                        <!-- Hospital -->
-                        <div class="bg-white rounded-xl shadow-lg px-6 py-4 border-l-4 border-secondary hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1>
-                            <div class="flex items-start space-x-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-bold text-gray-800">Park Hospital</h4>
-                                        <span class="bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">10 mins</span>
-                                    </div>
-                                </div>
+                        <div class="bg-white shadow-xl px-8 py-6 border-l-4 border-secondary premium-card">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-black text-lg">Park Hospital</h4>
+                                <span class="bg-gradient-to-r from-secondary to-primary text-white px-4 py-2 text-sm font-bold shadow-lg">10 mins</span>
                             </div>
                         </div>
                     </div>
@@ -548,168 +694,201 @@
     </section>
 
     <!-- Master Plan -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-12 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Master Plan</h2>
-                <p class="text-xl text-gray-600">Discover the comprehensive layout of our development</p>
+            <div class="text-center mb-12">
+                <h2 class="text-6xl md:text-7xl gradient-text mb-5">Master Plan</h2>
+                <div class="h-1.5 w-32 bg-gradient-to-r from-black via-secondary to-black mx-auto mb-5"></div>
+                <p class="text-xl md:text-2xl text-gray-600 font-light">Comprehensive development layout showcasing our thoughtful design</p>
             </div>
             <div class="relative">
                 <div class="blur-content">
-                    <img src="img/14.png" 
-                         alt="Master Plan" class="w-full h-96 object-cover rounded-lg shadow-xl">
+                    <img src="img/11.png" alt="Master Plan" class="w-full h-[32rem] object-cover shadow-2xl">
                 </div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <button class="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105">
-                        <a href="tel:+919090939193">Click to View Master Plan</a>
+                <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <button class="bg-gradient-to-r from-secondary to-primary text-white px-10 py-4 text-lg font-black transition-all transform hover:scale-110 shadow-2xl border border-black/20">
+                        <a href="tel:+919090939193" class="flex items-center">
+                            <i class="fas fa-download mr-3"></i>
+                            Download Master Plan
+                        </a>
                     </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-primary mb-4">Frequently Asked Questions</h2>
-                <p class="text-xl text-gray-600">Find answers to common questions about Elan</p>
-            </div>
-            <div class="space-y-4">
-                <div class="bg-white rounded-lg shadow-lg">
-                    <button class="w-full px-6 py-4 text-left font-semibold text-primary flex justify-between items-center" onclick="toggleFAQ(1)">
-                        <span>What is the expected possession date?</span>
-                        <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-1"></i>
-                    </button>
-                    <div class="px-6 pb-4 text-gray-600 hidden" id="faq-content-1">
-                        The expected possession date is December 2025. All units will be delivered with premium finishes and fixtures.
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg">
-                    <button class="w-full px-6 py-4 text-left font-semibold text-primary flex justify-between items-center" onclick="toggleFAQ(2)">
-                        <span>What are the payment plans available?</span>
-                        <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-2"></i>
-                    </button>
-                    <div class="px-6 pb-4 text-gray-600 hidden" id="faq-content-2">
-                        We offer flexible payment plans including construction-linked plans and early bird discounts. Please contact our sales team for detailed information.
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg">
-                    <button class="w-full px-6 py-4 text-left font-semibold text-primary flex justify-between items-center" onclick="toggleFAQ(3)">
-                        <span>What amenities are included in the maintenance?</span>
-                        <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-3"></i>
-                    </button>
-                    <div class="px-6 pb-4 text-gray-600 hidden" id="faq-content-3">
-                        All amenities including swimming pool, gym, clubhouse, landscaped gardens, security services, and common area maintenance are included in the maintenance charges.
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg">
-                    <button class="w-full px-6 py-4 text-left font-semibold text-primary flex justify-between items-center" onclick="toggleFAQ(4)">
-                        <span>Is parking available for all residents?</span>
-                        <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-4"></i>
-                    </button>
-                    <div class="px-6 pb-4 text-gray-600 hidden" id="faq-content-4">
-                        Yes, we provide covered parking spaces for all residents. Additional parking spaces are available for purchase based on availability.
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg">
-                    <button class="w-full px-6 py-4 text-left font-semibold text-primary flex justify-between items-center" onclick="toggleFAQ(5)">
-                        <span>What are the security measures in place?</span>
-                        <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-5"></i>
-                    </button>
-                    <div class="px-6 pb-4 text-gray-600 hidden" id="faq-content-5">
-                        We have 24/7 security surveillance with CCTV cameras, trained security personnel, gated entry with access control, and intercom systems in all units.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Contact CTA -->
-    <section id="contact" class="py-20 bg-primary text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-4">Ready to Make Elan Your Home?</h2>
-            <p class="text-xl mb-8 opacity-90">Contact us today to schedule a site visit and experience luxury living firsthand</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105">
-                    <a href="tel:+919090939193">Call Now: +91 9090 939193</a>
+
+    <!-- Call to Action -->
+    <section class="py-16  parallax-bg relative" style="background-image: url('img/cta-bg.png');">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/90"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <div class="floating-animation mb-8">
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8" style="text-shadow: 3px 6px 12px rgba(0,0,0,0.4);">Ready to Invest?</h2>
+                <div class="h-1.5 w-32 md:w-40 bg-white/50 mx-auto mb-6 md:mb-8"></div>
+                <p class="text-lg md:text-2xl lg:text-3xl mb-5 md:mb-16 max-w-4xl mx-auto font-light leading-relaxed px-4" style="text-shadow: 2px 4px 8px rgba(0,0,0,0.4);">
+                    Don't miss this opportunity to own a piece of luxury. <br class="hidden md:block"/>Book your site visit today!
+                </p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-center">
+                <button class="bg-white text-primary px-8 md:px-10 py-3 md:py-4 text-base md:text-lg font-black transition-all transform hover:scale-110 shadow-2xl call-button-animation w-full md:w-auto rounded">
+                    <a href="tel:+919090939193" class="flex items-center justify-center gap-2 md:gap-3">
+                        <i class="fas fa-phone-volume"></i>
+                        Call Now: +91 9090 939193
+                    </a>
                 </button>
-                <button class="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-lg text-lg font-semibold transition-all">
-                    <a href="tel:+919090939193">Schedule Site Visit</a>
+                <button class="border-2 border-white text-white px-8 md:px-10 py-3 md:py-4 text-base md:text-lg font-black transition-all transform hover:scale-110 hover:bg-white hover:text-primary shadow-2xl w-full md:w-auto rounded">
+                    <a href="tel:+919090939193" class="flex items-center justify-center gap-2 md:gap-3">
+                        <i class="fas fa-calendar-check"></i>
+                        Book Site Visit
+                    </a>
                 </button>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white py-12 md:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <a href="/index.html">
-                        <img src="logo.png" alt="Elan" class="w-20 brightness-0 invert">
-                    </a>
-                    <p class="text-gray-400 pt-3">Experience luxury living at its finest. Your dream home awaits in the heart of the city.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#about" class="hover:text-secondary transition-colors">About Project</a></li>
-                        <li><a href="#highlights" class="hover:text-secondary transition-colors">Highlights</a></li>
-                        <li><a href="#amenities" class="hover:text-secondary transition-colors">Amenities</a></li>
-                        <li><a href="#location" class="hover:text-secondary transition-colors">Location</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
-                    <div class="space-y-2 text-gray-400">
-                        <p><i class="fas fa-phone mr-2"></i>+91 9090 939193</p>
-                        <p><i class="fas fa-envelope mr-2"></i>info@elanproject.com</p>
-                        <p><i class="fas fa-map-marker-alt mr-2"></i>Sector 49, Gurgaon</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+                <div class="space-y-4 md:space-y-6 text-center md:text-left">
+                    <img src="logo.png" alt="Elan" class="w-24 md:w-32 mx-auto md:mx-0">
+                    <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                        Elan represents the pinnacle of luxury living, where every detail is crafted with precision and passion for an extraordinary lifestyle.
+                    </p>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-primary to-secondary flex items-center justify-center hover:scale-110 transition-transform ">
+                            <i class="fab fa-facebook-f text-sm md:text-base"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-primary to-secondary flex items-center justify-center hover:scale-110 transition-transform ">
+                            <i class="fab fa-instagram text-sm md:text-base"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-primary to-secondary flex items-center justify-center hover:scale-110 transition-transform ">
+                            <i class="fab fa-youtube text-sm md:text-base"></i>
+                        </a>
                     </div>
                 </div>
+                <div class="text-center md:text-left">
+                    <h4 class="text-lg md:text-xl font-bold mb-4 md:mb-8 text-secondary">Quick Links</h4>
+                    <ul class="space-y-2 md:space-y-4">
+                        <li><a href="#about" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">About Project</a></li>
+                        <li><a href="#highlights" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Highlights</a></li>
+                        <li><a href="#amenities" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Amenities</a></li>
+                        <li><a href="#location" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Location</a></li>
+                        <li><a href="tel:+919090939193" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Floor Plans</a></li>
+                    </ul>
+                </div>
+                <div class="text-center md:text-left">
+                    <h4 class="text-lg md:text-xl font-bold mb-4 md:mb-8 text-secondary">Contact Info</h4>
+                    <ul class="space-y-3 md:space-y-4">
+                        <li class="flex items-start justify-center md:justify-start">
+                            <i class="fas fa-phone-alt text-secondary mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold text-sm md:text-base">Phone</div>
+                                <a href="tel:+919090939193" class="text-gray-300 hover:text-secondary text-sm md:text-base">+91 9090 939193</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start justify-center md:justify-start">
+                            <i class="fas fa-envelope text-secondary mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold text-sm md:text-base">Email</div>
+                                <a href="mailto:info@elan.com" class="text-gray-300 hover:text-secondary text-sm md:text-base">info@elan.com</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start justify-center md:justify-start">
+                            <i class="fas fa-map-marker-alt text-secondary mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold text-sm md:text-base">Address</div>
+                                <span class="text-gray-300 text-sm md:text-base">Sector 49, Gurugram, Haryana</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-center md:text-left">
+                    <h4 class="text-lg md:text-xl font-bold mb-4 md:mb-8 text-secondary">Legal</h4>
+                    <ul class="space-y-2 md:space-y-4">
+                        <li><a href="tel:+919090939193" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">RERA Details</a></li>
+                        <li><a href="tel:+919090939193" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Terms & Conditions</a></li>
+                        <li><a href="tel:+919090939193" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Privacy Policy</a></li>
+                        <li><a href="tel:+919090939193" class="text-gray-300 hover:text-secondary transition-colors text-sm md:text-base">Disclaimer</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Elan Project. All rights reserved.</p>
+            <div class="section-divider opacity-30"></div>
+            <div class="text-center">
+                <p class="text-gray-400 text-xs md:text-sm">
+                    © 2024 Elan Sector 49. All rights reserved. | 
+                    RERA Reg. No: HRERA-GGM-1234-2024 | 
+                    <a href="tel:+919090939193" class="text-secondary hover:underline">Contact for more details</a>
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    *Prices subject to change without notice. Please contact for current pricing and availability.
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- Floating Action Buttons -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-3">
-        <!-- WhatsApp Button -->
-        <a href="https://wa.me/919090939193" target="_blank" 
-           class="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:scale-110 group">
-            <i class="fab fa-whatsapp text-2xl"></i>
-            <div class="absolute right-16 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                WhatsApp Us
-            </div>
-        </a>
-        
-        <!-- Call Button -->
-        <a href="tel:+919090939193" 
-           class="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:scale-110 group">
-            <i class="fas fa-phone text-xl"></i>
-            <div class="absolute right-16 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                Call Now
-            </div>
+    <!-- Floating Call Button -->
+    <div class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50">
+        <a href="#" onclick="showCallDialog(); return false;" class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-secondary to-primary text-white flex items-center justify-center shadow-2xl call-button-animation ">
+            <i class="fas fa-phone-alt text-xl md:text-2xl"></i>
         </a>
     </div>
 
+    <!-- Call Confirmation Dialog -->
+    <div id="callDialog" class="call-dialog">
+        <div class="dialog-content">
+            <div class="mb-4">
+                <i class="fas fa-phone-volume text-4xl text-primary mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Make a Call</h3>
+                <p class="text-gray-600">Do you want to call +91 9090 939193?</p>
+            </div>
+            <div class="dialog-buttons">
+                <button class="dialog-btn yes" onclick="makeCall()">
+                    <i class="fas fa-phone mr-2"></i>Yes, Call
+                </button>
+                <button class="dialog-btn no" onclick="closeDialog()">
+                    <i class="fas fa-times mr-2"></i>No, Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Enhanced Interactions -->
     <script>
-        // FAQ Toggle Function
-        function toggleFAQ(id) {
-            const content = document.getElementById(`faq-content-${id}`);
-            const icon = document.getElementById(`faq-icon-${id}`);
-            
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
+        // Call Dialog Functions
+        function showCallDialog() {
+            document.getElementById('callDialog').classList.add('show');
         }
+
+        function closeDialog() {
+            document.getElementById('callDialog').classList.remove('show');
+        }
+
+        function makeCall() {
+            window.location.href = 'tel:+919090939193';
+            closeDialog();
+        }
+
+        // Close dialog when clicking outside
+        document.getElementById('callDialog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDialog();
+            }
+        });
+
+        // Handle all phone number links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all links that have tel: href
+            const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+            
+            phoneLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showCallDialog();
+                });
+            });
+        });
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -725,7 +904,17 @@
             });
         });
 
-        // Scroll animations
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                navbar.classList.add('backdrop-blur-lg');
+            } else {
+                navbar.classList.remove('backdrop-blur-lg');
+            }
+        });
+
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -740,33 +929,52 @@
             });
         }, observerOptions);
 
-        // Observe all sections for animation
-        document.querySelectorAll('section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(30px)';
-            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(section);
+        // Observe all premium cards for animation
+        document.querySelectorAll('.premium-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
         });
 
-        // Mobile menu toggle
-        const mobileMenuButton = document.querySelector('button.md\\:hidden');
-        const mobileMenu = document.createElement('div');
-        mobileMenu.className = 'md:hidden bg-white shadow-lg absolute top-full left-0 right-0 hidden';
-        mobileMenu.innerHTML = `
-            <div class="px-4 py-2 space-y-2">
-                <a href="#hero" class="block py-2 hover:text-secondary transition-colors">Home</a>
-                <a href="#about" class="block py-2 hover:text-secondary transition-colors">About</a>
-                <a href="#highlights" class="block py-2 hover:text-secondary transition-colors">Highlights</a>
-                <a href="#amenities" class="block py-2 hover:text-secondary transition-colors">Amenities</a>
-                <a href="#location" class="block py-2 hover:text-secondary transition-colors">Location</a>
-                <a href="#contact" class="block py-2 hover:text-secondary transition-colors">Contact</a>
-            </div>
-        `;
-        document.querySelector('nav').appendChild(mobileMenu);
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        // Loading screen (optional)
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
         });
+
+        // Mobile menu toggle (if needed)
+        const mobileMenuBtn = document.querySelector('.md\\:hidden button');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                // Add mobile menu functionality if needed
+                console.log('Mobile menu clicked');
+            });
+        }
+
+        // Phone number click tracking
+        document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+            link.addEventListener('click', function() {
+                // Track phone number clicks for analytics if needed
+                console.log('Phone number clicked:', this.href);
+            });
+        });
+
+        // Image lazy loading enhancement
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.style.filter = 'blur(0px)';
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
     </script>
 </body>
 </html>
