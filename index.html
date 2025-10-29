@@ -7,8 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+        /* Use local Optima font file. Place OPTIMA.TTF next to this HTML file. */
+        @font-face {
+            font-family: 'OptimaCustom';
+            src: url('OPTIMA.TTF') format('truetype');
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,7 +23,8 @@
         }
         
         body {
-            font-family: 'Poppins', sans-serif;
+            /* Primary: local Optima (OPTIMA.TTF). Fallback to system Optima or generic sans-serif */
+            font-family: 'OptimaCustom', 'Optima', sans-serif;
             overflow-x: hidden;
         }
         
@@ -166,7 +174,7 @@
                     <a href="#price" class="text-gray-700 hover:text-cyan transition text-sm">Price</a>
                     <a href="#floorplan" class="text-gray-700 hover:text-cyan transition text-sm">Floor Plan</a>
                     <a href="#amenities" class="text-gray-700 hover:text-cyan transition text-sm">Amenities</a>
-                    <a href="tel:+919090939193" class="border-2 border-cyan text-cyan px-4 py-2 text-sm hover:bg-cyan hover:text-white transition">
+                    <a href="tel:+919090939193" class="border-2 border-cyan text-cyan px-4 py-2 text-sm hover:bg-cyan hover:text-black transition">
                         <i class="fas fa-phone"></i> 9090 939193
                     </a>
                 </div>
@@ -287,7 +295,7 @@
                         <img src="img/7.png" alt="Floor Plan" class="w-full h-full object-cover opacity-50">
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <a href="tel:+919090939193" class="bg-cyan text-white px-8 py-3 hover:bg-cyan-600 transition">Download Floor Plan</a>
+                        <a href="tel:+919090939193" class="bg-cyan text-white px-8 py-3 hover:bg-cyan transition">Download Floor Plan</a>
                     </div>
                     <div class="bg-gray-800 text-white text-center py-4">
                         <h3 class="text-2xl font-light tracking-wider">4 BHK</h3>
@@ -299,7 +307,7 @@
                         <img src="img/11.png" alt="Site Plan" class="w-full h-full object-cover opacity-50">
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <a href="tel:+919090939193" class="bg-cyan text-white px-8 py-3 hover:bg-cyan-600 transition">Download Site Plan</a>
+                        <a href="tel:+919090939193" class="bg-cyan text-white px-8 py-3 hover:bg-cyan transition">Download Site Plan</a>
                     </div>
                     <div class="bg-gray-800 text-white text-center py-4">
                         <h3 class="text-2xl font-light tracking-wider">SITE PLAN</h3>
@@ -318,7 +326,7 @@
             
             <div class="grid md:grid-cols-2 gap-12 items-start">
                 <div>
-                    <a href="tel:+919090939193" class="bg-cyan text-white px-10 py-4 hover:bg-cyan-600 transition flex items-center gap-2">
+                    <a href="tel:+919090939193" class="bg-cyan text-white px-10 py-4 hover:bg-cyan transition flex items-center gap-2">
                         <i class="fas fa-download"></i>
                         DOWNLOAD BROCHURE
                     </a>
@@ -408,8 +416,8 @@
                         </iframe>
                     </div>
                     <div class="flex gap-4 mt-4">
-                        <a href="https://maps.google.com/maps?q=Sector+49+Gurugram+Haryana" target="_blank" class="flex-1 bg-cyan text-white py-3 hover:bg-cyan-600 transition text-center">MAP NAVIGATION</a>
-                        <a href="tel:+919090939193" class="flex-1 bg-cyan text-white py-3 hover:bg-cyan-600 transition text-center">PROJECT LOCATION</a>
+                        <a href="https://maps.google.com/maps?q=Sector+49+Gurugram+Haryana" target="_blank" class="flex-1 bg-cyan text-white py-3 hover:bg-cyan transition text-center">MAP NAVIGATION</a>
+                        <a href="tel:+919090939193" class="flex-1 bg-cyan text-white py-3 hover:bg-cyan transition text-center">PROJECT LOCATION</a>
                     </div>
                 </div>
             </div>
