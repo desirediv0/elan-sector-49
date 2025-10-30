@@ -7,9 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Local font files - Place TTF files next to this HTML file */
         @font-face {
-            font-family: 'OptimaCustom';
-            src: url('OPTIMA.TTF') format('truetype');
+            font-family: 'PoppinsCustom';
+            src: url('Poppins-Regular.ttf') format('truetype');
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'LibreCaslonCustom';
+            src: url('LibreCaslonDisplay-Regular.ttf') format('truetype');
             font-style: normal;
             font-weight: 400;
             font-display: swap;
@@ -22,7 +31,8 @@
         }
         
         body {
-            font-family: 'OptimaCustom', 'Optima', sans-serif;
+            /* Primary: local Poppins, fallback to LibreCaslon, then system fonts */
+            font-family: 'PoppinsCustom', 'LibreCaslonCustom', 'Poppins', sans-serif;
             overflow-x: hidden;
         }
         
